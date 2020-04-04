@@ -1,0 +1,72 @@
+<% include ../header %>
+
+<style>
+    .center-content {
+        top: 50%;
+        margin-top: 110px;
+    }
+
+   
+   
+</style>
+
+<div class="container-fluid">
+
+    <div class="grid">
+
+        <div class="row">
+            <div class="cell">
+                <div> <% include ../menu %></div>
+            </div>
+         
+        </div>
+        
+        <div class="center-content">
+            <div class="row">
+                <div class="cell">
+                    <form action="/contact" method="POST" class="inline-form" data-role="validator" >
+                        <input type="text" name="contact[name]" placeholder="Name" data-validate="required minlength=3">
+                        <input type="text" name="contact[email]" placeholder="Email" data-validate="required email">
+                        <button class="button success">Submit</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="cell">
+                    
+                        <table class="table" data-role="table"
+                        data-cls-table-top="row flex-nowrap"
+                        data-cls-search="cell-md-8"
+                        data-cls-rows-count="cell-md-4"
+                        data-rows="15"
+                        data-rows-steps="15, 30"
+                        data-show-activity="false">
+                            <thead>
+                            <tr>
+                                <th data-name="name" >Name</th>
+                                <th data-name="email" >Email</th>
+                                <th>Action</th>                            
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <% contacts.forEach((contact, index) =>{  %>
+                            <tr>
+                                <td><%- contact.name %></td>
+                                <td><%- contact.email %></td>
+                                <td><a href="/contact/<%- index %>"> Details</a></td>
+                                
+                            </tr>
+                            <% }) %>    
+                            </tbody>
+                        </table>
+                    </div>
+                
+            </div>
+        </div>
+    </div>
+       
+</div>
+
+
+<% include ../footer %>

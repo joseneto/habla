@@ -1,0 +1,45 @@
+<% include ../header %>
+
+<style>
+    .center-content {
+        top: 50%;
+        margin-top: 110px;
+    }
+
+   
+   
+</style>
+
+<div class="container-fluid">
+
+    <div class="grid">
+
+        <div class="row">
+            <div class="cell">
+                <div> <% include ../menu %></div>
+            </div>
+         
+        </div>
+        
+        <div class="center-content">
+            <div class="row">
+                <div class="cell">
+                    <form action="/contact/<%- id %>?_method=delete" method="POST" data-role="validator" >
+                        <label>Name: <%- contact.name %></label>
+                        <label>Email: <%- contact.email %></label>
+                        
+                        <a class="button success" href="/contact/<%- id %>/edit" role="button">Edit</a>
+                        <button class="button alert">Remove</button>
+                        <a class="button" href="/contacts" role="button">Back</a>
+                    </form>
+                </div>
+            </div>
+
+            
+        </div>
+    </div>
+       
+</div>
+
+
+<% include ../footer %>
