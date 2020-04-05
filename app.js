@@ -4,23 +4,25 @@ const http = require('http');
 const socketIO = require('socket.io');
 const	consign	=	require('consign');
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
+const cookie = require('cookie');
 const session  = require('express-session');
 const methodOverride = require('method-override');
+const config = require('./config');
 const error = require('./middlewares/error');
 
 const	app	=	express();
 const server = http.Server(app);
 const io = socketIO(server);
+const store = new session.MemoryStore();
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine',	'ejs');
 
-app.use(cookieParser('habla'));
-
 app.set('trust proxy', 1) // trust first proxy
 app.use(session({
-  secret: '2134023174784027502170275092',
+  store: store,
+  name: config.sessionKey,
+  secret: config.sessionSecret,
   resave: false,
   saveUninitialized: false,
   cookie: { secure: false }
@@ -33,23 +35,34 @@ app.use(bodyParser.urlencoded({
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname,	'public')));
 
+//handle session in socket
+io.use((socket,	next)	=>	{
+  const	cookieData = socket.request.headers.cookie;
+  const	cookieObj	=	cookie.parse(cookieData);
+  const	sessionHash	=	cookieObj[config.sessionKey] || '';
+  const	sessionID	=	sessionHash.split('.')[0].slice(2);
+
+  store.all((err, sessions) => {
+    const	currentSession = sessions[sessionID];
+    if (err || !currentSession) {
+      
+      return next(new Error('access denied!'));
+    }
+    socket.handshake.session = currentSession;
+    return next();
+  });
+});
+
 consign({})
   .include('models')
   .then('controllers')
   .then('routes')
-  .into(app);
+  .then('events')
+  .into(app, io);
 //middlewares de error
 app.use(error.notFound);
 app.use(error.serverError);
 
-io.on('connection', (client) => {
-  client.on('send-server', (data) => {
-  
-    const response = data;
-    client.emit('send-client', response);
-    client.broadcast.emit('send-client', response);
-  });
-}); 
 
 server.listen(3000,	()	=>	{
   console.log('Habla running!');
