@@ -1,0 +1,67 @@
+<% include ../header %>
+
+<style>
+    .center-content {
+        top: 50%;
+        margin-top: 110px;
+    }
+
+   
+   
+</style>
+<script	src="/socket.io/socket.io.js"></script>
+<script>
+
+    const socket = io();
+    const room = "<%- room %>";
+    socket.emit('create-room', room);
+    socket.on('send-client', (data) => {
+      
+        if(data.name != "<%-user.name %>") {
+            var message = {id: data.id, name: data.name, text: data.text ,time: new Date(), avatar: data.avatar, position:"left"};
+            var chat = Metro.getPlugin("#mychat", "chat");
+
+            chat.add(message);
+        }
+      
+    });
+
+    function send(objMessage){
+        
+        socket.emit('send-server',room, objMessage);
+    }
+</script>
+
+<div class="container-fluid">
+
+    <div class="grid">
+
+        <div class="row">
+            <div class="cell">
+                <div> <% include ../menu %></div>
+            </div>
+         
+        </div>
+        
+        <div class="mx-auto chat center-content ">
+            
+          
+            <div id='mychat'
+                data-role="chat"
+                data-width="500"
+                data-height="600"
+                data-name="<%- user.name %>"
+                data-on-send="send"
+                data-cls-message-right="bg-lightGreen"
+
+          ></div>
+          <a class="button" href="/contacts" role="button">Back</a>
+   
+            
+        </div>
+    </div>
+       
+</div>
+
+
+<% include ../footer %>
