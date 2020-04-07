@@ -7,8 +7,14 @@ const bodyParser = require('body-parser');
 const cookie = require('cookie');
 const session  = require('express-session');
 const methodOverride = require('method-override');
+const mongoose = require('mongoose');
+const bluebird = require('bluebird');
 const config = require('./config');
 const error = require('./middlewares/error');
+
+mongoose.Promise = bluebird;
+mongoose.set('useUnifiedTopology', true);
+global.db = mongoose.connect('mongodb://127.0.0.1:27017/habla',{ useNewUrlParser: true });
 
 const	app	=	express();
 const server = http.Server(app);
