@@ -24,7 +24,7 @@
         <div class="center-content">
             <div class="row">
                 <div class="cell">
-                    <form action="/contact/<%- id %>?_method=put" class="inline-form" data-role="validator" >
+                    <form action="/contact/<%- contact._id %>?_method=put" class="inline-form" data-role="validator" >
                         <input type="text" name="contact[name]" placeholder="Name" data-validate="required minlength=3" value="<%- user.name %>">
                         <input type="text" name="contact[email]" placeholder="Email" data-validate="required email"  value="<%- user.email %>">
                         <button class="button success">Update</button>&nbsp;

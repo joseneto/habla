@@ -24,11 +24,11 @@
         <div class="center-content">
             <div class="row">
                 <div class="cell">
-                    <form action="/contact/<%- id %>?_method=delete" method="POST" data-role="validator" >
+                    <form action="/contact/<%- contact._id %>?_method=delete" method="POST" data-role="validator" >
                         <label>Name: <%- contact.name %></label>
                         <label>Email: <%- contact.email %></label>
                         
-                        <a class="button success" href="/contact/<%- id %>/edit" role="button">Edit</a>
+                        <a class="button success" href="/contact/<%- contact._id %>/edit" role="button">Edit</a>
                         <button class="button alert">Remove</button>
                         <a class="button" href="/contacts" role="button">Back</a>
                     </form>
