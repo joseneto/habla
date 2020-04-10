@@ -13,22 +13,22 @@
 
 <script>
     const socket = io();
-    const notify =(idReg, classe, msg) => {
-        const status = document.getElementById(`sp_${idReg}`);
+    const notify =(name, classe, msg) => {
+        const status = document.getElementById(`sp_${name}`);
         if(status){
             status.innerHTML = `<code class="${classe}">${msg}</code>`;
         }
     }
 
-    socket.on('notify-onlines', (idReg) => {
-        notify(idReg,'success' ,'Online');
+    socket.on('notify-onlines', (name) => {
+        notify(name,'success' ,'Online');
 	});
-    socket.on('notify-offlines',	(idReg)	=>	{
-        notify(idReg,'warning' ,'Offline');
+    socket.on('notify-offlines',	(name)	=>	{
+        notify(name,'warning' ,'Offline');
     });
 
     socket.on('new-message', (data) => {
-        const chat = document.getElementById(`badge_${data.idReg}`);
+        const chat = document.getElementById(`badge_${data.name}`);
        
         if	(chat.href.includes('?room='))	{
             chat.href = chat.href.replace(/\?room=[\w]+/, `?room=${data.room}`);
@@ -36,7 +36,7 @@
             chat.href += `?room=${data.room}`;
         }
     
-        notify(data.idReg,'primary', 'New Message');
+        notify(data.name,'primary', 'New Message');
       
     });
 
@@ -87,13 +87,13 @@
                             <tr>
                                 <td><%- contact.name %></td>
                                 <td><%- contact.email %></td>
-                                <td><span id='sp_<%-contact._id%>'><code class="warning">Offline</code></span></td>
+                                <td><span id='sp_<%-contact.name%>'><code class="warning">Offline</code></span></td>
                                 <td>
-                                    <a href="/contact/<%- contact._id %>"> 
+                                    <a href="/contact/<%- contact.name %>"> 
                                         <span class="ml-1">Details</span>
                                         
                                     </a>
-                                    <a id='badge_<%- contact._id %>' href="/chat">
+                                    <a id='badge_<%- contact.name %>' href="/chat">
                                         <span class="ml-1">Chat</span>
                                         
                                     </a>

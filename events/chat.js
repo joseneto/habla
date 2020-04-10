@@ -18,10 +18,10 @@ module.exports = (app, io) => {
         });
 
         client.on('send-server', (room, data) => {
-          let response = data;
-          const newMessage = {idReg: user._id, room: room};
+          const response = data;
+          const newMessage = {name: user.name, room: room};
           session.room = room;
-          response.idReg = user._id;
+          
           redis.lpush(room, JSON.stringify(response));
           client.broadcast.emit('new-message', newMessage);
           io.to(room).emit('send-client', response);
