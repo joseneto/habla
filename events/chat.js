@@ -9,7 +9,7 @@ module.exports = (app, io) => {
         const { user } = session;
 
         redis.sadd('onlines', user._id, () => {
-            redis.smenbers('onlines',(err, ids) => {
+            redis.smembers('onlines',(err, ids) => {
                 ids.forEach((id) => {
                     client.emit('notify-onlines', id);
                     client.broadcast.emit('notify-onlines',	id);
@@ -22,7 +22,7 @@ module.exports = (app, io) => {
           const newMessage = {idReg: user._id, room: room};
           session.room = room;
           response.idReg = user._id;
-          redis.lpush(room, response);
+          redis.lpush(room, JSON.stringify(response));
           client.broadcast.emit('new-message', newMessage);
           io.to(room).emit('send-client', response);
          
@@ -35,10 +35,10 @@ module.exports = (app, io) => {
             defaultMessage.id= randomId;    
             defaultMessage.text='User enter the chat';
             defaultMessage.name=user.name;
-            redis.lpush(data, defaultMessage, () => {
+            redis.lpush(data, JSON.stringify(defaultMessage), () => {
                 redis.lrange(data, 0, -1, (err, msgs) => {
                     msgs.forEach((msg) => {
-                        io.to(data).emit('send-client', msg);
+                        io.to(data).emit('send-client', JSON.parse(msg));
                     });
                 });
             });
