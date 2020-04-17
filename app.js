@@ -67,3 +67,5 @@ app.use(error.serverError);
 server.listen(3000,	()	=>	{
   console.log('Habla running!');
 });
+
+module.exports = app;
