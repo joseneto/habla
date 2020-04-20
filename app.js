@@ -9,11 +9,17 @@ const session  = require('express-session');
 const methodOverride = require('method-override');
 const config = require('./config');
 const error = require('./middlewares/error');
+const redis = require('redis')
+const redisAdapter = require('socket.io-redis');
+
+let RedisStore = require('connect-redis')(session)
+let redisClient = redis.createClient()
 
 const	app	=	express();
 const server = http.Server(app);
 const io = socketIO(server);
-const store = new session.MemoryStore();
+//const store = new session.MemoryStore();
+const store = new RedisStore({client: redisClient, prefix: config.sessionKey});
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine',	'ejs');
@@ -35,6 +41,8 @@ app.use(bodyParser.urlencoded({
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname,	'public')));
 
+
+io.adapter(redisAdapter());
 //handle session in socket
 io.use((socket,	next)	=>	{
   const	cookieData = socket.request.headers.cookie;
@@ -42,7 +50,8 @@ io.use((socket,	next)	=>	{
   const	sessionHash	=	cookieObj[config.sessionKey] || '';
   const	sessionID	=	sessionHash.split('.')[0].slice(2);
 
-  store.all((err, sessions) => {
+    //With memory management was store.all
+  store.get((err, sessions) => {
     const	currentSession = sessions[sessionID];
     if (err || !currentSession) {
       

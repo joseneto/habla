@@ -45,7 +45,7 @@ module.exports = (app) => {
             const contactId = req.params.id;
             User.findById(_id)
                 .then((user) => {
-                    const {concatcs} = user;
+                    const {contacts} = user;
                     const contact = contacts.find((ct) => {
                         return ct._id.toString() === contactId;
                     })

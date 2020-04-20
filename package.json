@@ -4,11 +4,13 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node app.js",
+    "cluster": "SET DEBUG=* && node cluster.js >> cluster.log",
+    "start": "SET DEBUG=* && node app.js >> app.log",
     "test": "SET NODE_ENV=test && mocha tests/**/*.js --exit"
   },
   "dependencies": {
     "bluebird": "^3.7.2",
+    "connect-redis": "^4.0.4",
     "consign": "^0.1.6",
     "cookie-parser": "~1.4.4",
     "ejs": "~2.6.1",
@@ -18,7 +20,8 @@
     "method-override": "^3.0.0",
     "mongoose": "^5.9.7",
     "redis": "^3.0.2",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.3.0",
+    "socket.io-redis": "^5.2.0"
   },
   "devDependencies": {
     "mocha": "^7.1.1",
