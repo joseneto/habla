@@ -46,7 +46,9 @@ app.use(bodyParser.urlencoded({
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname,	'public'), {maxAge: 3600000}));
 
-app.use(csurf());
+app.use(
+  process.env.NODE_ENV.trim() === 'test' ?  csurf({ ignoreMethods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'DELETE'] }): csurf()
+);
 app.use((req, res, next) => {
   res.locals._csrf = req.csrfToken();
   next();
