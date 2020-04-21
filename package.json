@@ -4,18 +4,21 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "cluster": "SET DEBUG=* && node cluster.js >> cluster.log",
-    "start": "SET DEBUG=* && node app.js >> app.log",
+    "start": "SET DEBUG=* && node server",
+    "app": "SET DEBUG=* && node app.js >> app.log",
     "test": "SET NODE_ENV=test && mocha tests/**/*.js --exit"
   },
   "dependencies": {
     "bluebird": "^3.7.2",
+    "compression": "^1.7.4",
     "connect-redis": "^4.0.4",
     "consign": "^0.1.6",
     "cookie-parser": "~1.4.4",
+    "csurf": "^1.11.0",
     "ejs": "~2.6.1",
     "express": "~4.16.1",
     "express-session": "^1.17.0",
+    "forever-monitor": "^2.0.0",
     "http-errors": "~1.6.3",
     "method-override": "^3.0.0",
     "mongoose": "^5.9.7",

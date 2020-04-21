@@ -25,6 +25,7 @@
             <div class="row">
                 <div class="cell">
                     <form action="/contact/<%- contact._id %>?_method=delete" method="POST" data-role="validator" >
+                        <input type="hidden" name="_csrf" value="<%- _csrf %>">
                         <label>Name: <%- contact.name %></label>
                         <label>Email: <%- contact.email %></label>
                         

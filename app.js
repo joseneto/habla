@@ -4,18 +4,21 @@ const http = require('http');
 const socketIO = require('socket.io');
 const	consign	=	require('consign');
 const bodyParser = require('body-parser');
+const csurf = require('csurf');
 const cookie = require('cookie');
 const session  = require('express-session');
+const compression = require('compression');
 const methodOverride = require('method-override');
 const config = require('./config');
 const error = require('./middlewares/error');
 const redis = require('redis')
 const redisAdapter = require('socket.io-redis');
 
-let RedisStore = require('connect-redis')(session)
-let redisClient = redis.createClient()
+let RedisStore = require('connect-redis')(session);
+let redisClient = redis.createClient(config.redis);
 
 const	app	=	express();
+app.disable('x-powered-by');
 const server = http.Server(app);
 const io = socketIO(server);
 //const store = new session.MemoryStore();
@@ -25,6 +28,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine',	'ejs');
 
 app.set('trust proxy', 1) // trust first proxy
+
+app.use(compression());
 app.use(session({
   store: store,
   name: config.sessionKey,
@@ -39,8 +44,13 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(methodOverride("_method"));
-app.use(express.static(path.join(__dirname,	'public')));
+app.use(express.static(path.join(__dirname,	'public'), {maxAge: 3600000}));
 
+app.use(csurf());
+app.use((req, res, next) => {
+  res.locals._csrf = req.csrfToken();
+  next();
+});
 
 io.adapter(redisAdapter());
 //handle session in socket

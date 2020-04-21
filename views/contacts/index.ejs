@@ -57,6 +57,7 @@
             <div class="row">
                 <div class="cell">
                     <form action="/contact" method="POST" class="inline-form" data-role="validator" >
+                        <input type="hidden" name="_csrf" value="<%- _csrf %>">
                         <input type="text" name="contact[name]" placeholder="Name" data-validate="required minlength=3">
                         <input type="text" name="contact[email]" placeholder="Email" data-validate="required email">
                         <button class="button success">Submit</button>
