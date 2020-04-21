@@ -1,5 +1,7 @@
 # Habla: A NodeJS Chat
 
+[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
+
 Habla is a opensource project to management of contacts. you can save your contacts, see if anyone is online and start chatting. This projects was built using express, mongodb, redis and socket.io. There is a lot of others libraries like forever and csurf to make this project elegible to production ready!
 
 
